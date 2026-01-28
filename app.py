@@ -260,7 +260,7 @@ if 'messages' not in st.session_state:
 if 'session_id' not in st.session_state:
     st.session_state.session_id = str(uuid.uuid4())
 if 'selected_model' not in st.session_state:
-    st.session_state.selected_model = "gpt-4.1-2025-04-14"
+    st.session_state.selected_model = "gpt-5.1-2025-11-13"
 if 'chat_history' not in st.session_state:
     st.session_state.chat_history = []
 if 'chat_started' not in st.session_state:
@@ -412,7 +412,7 @@ def process_question(question):
     # 2) Get AI response
     start_time = time.time()
     
-    if st.session_state.selected_model == "gpt-4.1-2025-04-14":
+    if st.session_state.selected_model == "gpt-5.1-2025-11-13":
         response = call_openai_api(st.session_state.messages)
     else:
         response = call_langchain_anthropic_api(st.session_state.messages)
@@ -437,8 +437,9 @@ def call_openai_api(messages):
         # Initialize the LangChain OpenAI client
         chat = ChatOpenAI(
             openai_api_key=OPENAI_API_KEY,
-            model="gpt-4.1-2025-04-14",
-            max_tokens = 8000,
+            model="gpt-5.1-2025-11-13",
+            # temperature=0.2,
+            max_completion_tokens = 8000,
             streaming=True
         )
         
@@ -538,14 +539,14 @@ with st.sidebar:
     st.markdown("<div class='model-buttons'>", unsafe_allow_html=True)
     
     # OpenAI GPT-4o option
-    openai_selected = st.session_state.selected_model == "gpt-4.1-2025-04-14"
+    openai_selected = st.session_state.selected_model == "gpt-5.1-2025-11-13"
     if st.button(
-        f"OpenAI GPT-4o", 
+        f"OpenAI GPT-5.1", 
         key="openai-btn", 
-        help="OpenAI's GPT-4o model - versatile, high performance AI",
+        help="OpenAI's GPT-5.1 model - versatile, high performance AI",
         type="secondary" if not openai_selected else "primary",
         use_container_width=True):
-        st.session_state.selected_model = "gpt-4.1-2025-04-14"
+        st.session_state.selected_model = "gpt-5.1-2025-11-13"
         st.rerun()
 
     # Anthropic Claude option
